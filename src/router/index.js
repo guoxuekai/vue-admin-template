@@ -91,6 +91,41 @@ export const constantRoutes = [
   },
 
   {
+    path: '/table',
+    component: Layout,
+    redirect: '/table/index',
+    name: 'Example',
+    meta: { title: 'Item Table', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'index',
+        name: 'table',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'Table', icon: 'table' }
+      },
+      {
+        path: 'complex',
+        name: 'complex',
+        component: () => import('@/views/table/complex-table'),
+        meta: { title: 'Table', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/table2',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Table',
+        component: () => import('@/views/table2/index'),
+        meta: { title: 'Table', icon: 'table' }
+      }
+    ]
+  },
+
+  {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <!--    <div class="filter-container">
       <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
@@ -23,7 +23,7 @@
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         reviewer
       </el-checkbox>
-    </div>
+    </div>-->
 
     <el-table
       :key="tableKey"
@@ -31,16 +31,69 @@
       :data="list"
       border
       fit
+      stripe
+      border
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="ID" prop="itemID" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.itemID }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Date" width="150px" align="center">
+
+      <el-table-column label="Thumbnail" width="100">
+        <template #default="scope">
+          <div style="display: flex; align-items: center">
+            <el-image src="https://www.eficonnection.com/assets/ProductImages/100-00010.png" />
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="itemName" label="Name" width="200" />
+      <el-table-column prop="itemPartNumber" label="Part Number" />
+      <el-table-column prop="itemStock" label="Stock" width="100" />
+      <el-table-column prop="itemUnits.0.itemUnitName" label="Unit" width="80" />
+      <el-table-column
+        :filter-method="filterTag"
+        :filters="[
+          { text: 'Connector', value: 'Connector' },
+          { text: 'Harness', value: 'Harness' },
+          { text: 'Terminal', value: 'Terminal' },
+          { text: 'Seal', value: 'Seal' },
+        ]"
+        filter-placement="bottom-end"
+        label="Category"
+        prop="itemCategories.0.itemCategoryName"
+        width="120"
+      >
+        <template slot-scope="{row}">
+          <el-tag
+            :type="tagType(row.itemCategories[0].itemCategoryName)"
+            disable-transitions
+            effect="light"
+            round
+          >
+            {{ row.itemCategories[0].itemCategoryName }}
+          </el-tag>
+        </template>
+        <!--    <template #default="scope">
+          <el-tag
+            :type="tagType(scope.row.category)"
+            disable-transitions
+            effect="light"
+            round
+          >{{ scope.row.category }}</el-tag>
+          <el-tag>{{ scope.row.category }}</el-tag>
+        </template>-->
+      </el-table-column>
+      <el-table-column prop="itemLocations.0.itemLocationName" label="Location" width="100" />
+      <el-table-column prop="itemStatus" label="Status" width="80">
+        <template slot-scope="{row}">
+          <span>{{ row.itemStatus }}</span>
+        </template>
+      </el-table-column>
+      <!--      <el-table-column label="Date" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
@@ -94,12 +147,12 @@
             Delete
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+<!--    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="Type" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
@@ -142,15 +195,17 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
       </span>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchList, fetchPv, createArticle, updateArticle, fetchItemList } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
+import { fetchItem, fetchItemCategory, fetchItemLocation } from '@/api/item'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -166,7 +221,7 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'index',
+  name: 'Index',
   components: { Pagination },
   directives: { waves },
   filters: {
@@ -227,16 +282,42 @@ export default {
     }
   },
   created() {
-    this.getList()
+    // this.getList()
+    this.getItemList()
+    //this.getItemByPage()
   },
   methods: {
+    /*
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      getItems(this.listQuery).then(response => {
         this.list = response.data.items
-        this.total = response.data.total
+        // this.total = response.data.total
 
         // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+    */
+    getItemList() {
+      this.listLoading = true
+
+      const aaa = fetchItemCategory().then(response => {
+        this.itemCategoryList = response.data.category
+        console.log('fetchItemCategory()')
+        console.log(this.itemCategoryList)
+      })
+
+      const abc = fetchItem().then(response => {
+        this.list = response.data.items
+
+        console.log('fetchItemList()')
+        console.log(this.list)
+        console.log(this.listLoading)
+        console.log(this.list[0]['itemCategories'][0]['itemCategoryName'])
+
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -373,6 +454,23 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    filterTag(value, row) {
+      return row.category === value
+    },
+    tagType(value) {
+      switch (value) {
+        case 'Connector':
+          return 'danger'
+        case 'Terminal':
+          return 'success'
+        case 'Seal':
+          return 'info'
+        case 'Harness':
+          return 'warning'
+        default:
+          return ''
+      }
     }
   }
 }

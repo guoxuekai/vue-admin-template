@@ -8,6 +8,14 @@ export function fetchList(query) {
   })
 }
 
+export function fetchItemList() {
+  return request({
+    url: '/api/item/findAll',
+    method: 'get',
+    params: null
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

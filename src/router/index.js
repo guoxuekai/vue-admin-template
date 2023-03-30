@@ -113,11 +113,11 @@ export const constantRoutes = [
   },
 
   {
-    path: '/table2',
+    path: '/table',
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: 'items',
         name: 'Table',
         component: () => import('@/views/table2/index'),
         meta: { title: 'Table', icon: 'table' }

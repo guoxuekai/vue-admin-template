@@ -7,3 +7,11 @@ export function getList(params) {
     params
   })
 }
+
+export function getItemList(params) {
+  return request({
+    url: 'http://localhost:8080/api/item/findAll',
+    method: 'get',
+    params
+  })
+}

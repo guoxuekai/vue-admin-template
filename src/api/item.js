@@ -7,11 +7,11 @@ export function fetchItem() {
   })
 }
 
-export function fetchItemByPage(pageNum) {
+export function fetchItemByPage(query) {
   return request({
     url: '/api/item/findByPage',
     method: 'get',
-    params: { pageNum }
+    params: query
   })
 }
 export function fetchItemCategory() {

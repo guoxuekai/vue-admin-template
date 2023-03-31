@@ -6,19 +6,19 @@
 <!--      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select>-->
-      <el-select v-model="itemQuery.itemCategoryID" placeholder="Category" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
+      <el-select v-model="itemQuery.itemCategoryID" placeholder="Category" clearable class="filter-item" style="width: 130px" @change="handleFilter">
+        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-select v-model="itemQuery.sortIDOption" style="width: 140px" class="filter-item" @change="handleFilter">
+      <el-select v-model="itemQuery.sortIDOption" style="width: 150px" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      <el-button v-waves class="filter-item" icon="el-icon-search" @click="handleFilter">
         Search
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+      <el-button class="filter-item" style="margin-left: 10px;" icon="el-icon-edit" @click="handleCreate">
         Add
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+      <el-button v-waves :loading="downloadLoading" class="filter-item" icon="el-icon-download" @click="handleDownload">
         Export
       </el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
@@ -152,7 +152,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="itemQuery.pageNum" :limit.sync="itemQuery.pageSize" @pagination="getItemByPage" />
 
-<!--    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="Type" prop="type">
           <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
@@ -195,7 +195,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
       </span>
-    </el-dialog>-->
+    </el-dialog>
   </div>
 </template>
 

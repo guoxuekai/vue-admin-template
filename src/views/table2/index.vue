@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="itemQuery.itemName" placeholder="Name" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input v-model="itemQuery.itemPartNumber" placeholder="Part Number" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="itemQuery.itemName" placeholder="Name" clearable style="width: 200px;" class="filter-item" @keyup.native="handleFilter" @change="handleFilter"/>
+      <el-input v-model="itemQuery.itemPartNumber" placeholder="Part Number" clearable style="width: 200px;" class="filter-item" @keyup.native="handleFilter" @change="handleFilter" />
 <!--      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select>-->
@@ -451,13 +451,13 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+        const tHeader = ['Name', 'Part Number', 'Stock', 'Unit', 'Category', 'Location', 'Status']
+        const filterVal = ['itemName', 'itemPartNumber', 'itemStock', 'itemUnitID', 'itemCategoryID', 'itemLocationID', 'itemStatus']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table-list'
+          filename: 'item-list'
         })
         this.downloadLoading = false
       })

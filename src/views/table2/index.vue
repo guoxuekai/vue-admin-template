@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
-    <!--    <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
+    <div class="filter-container">
+      <el-input v-model="itemQuery.itemName" placeholder="Name" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="itemQuery.itemPartNumber" placeholder="Part Number" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+<!--      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">
+      </el-select>-->
+      <el-select v-model="itemQuery.itemCategoryID" placeholder="Category" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
       </el-select>
       <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
@@ -23,7 +24,7 @@
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         reviewer
       </el-checkbox>
-    </div>-->
+    </div>
 
     <el-table
       :key="tableKey"
@@ -32,7 +33,6 @@
       border
       fit
       stripe
-      border
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
@@ -208,10 +208,10 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import { fetchItem, fetchItemCategory, fetchItemLocation, fetchItemByPage } from '@/api/item'
 
 const calendarTypeOptions = [
-  { key: 'CN', display_name: 'China' },
-  { key: 'US', display_name: 'USA' },
-  { key: 'JP', display_name: 'Japan' },
-  { key: 'EU', display_name: 'Eurozone' }
+  { key: '1', display_name: 'Harness' },
+  { key: '2', display_name: 'Terminal' },
+  { key: '3', display_name: 'Connector' },
+  { key: '4', display_name: 'Seal' }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -245,7 +245,10 @@ export default {
       listLoading: true,
       itemQuery: {
         pageNum: 1,
-        pageSize: 20
+        pageSize: 10,
+        itemName: undefined,
+        itemPartNumber: undefined,
+        itemCategoryID: undefined
       },
       listQuery: {
         page: 1,
@@ -336,12 +339,12 @@ export default {
         console.log(this.list)
         setTimeout(() => {
           this.listLoading = false
-        }, 1.5 * 1000)
+        }, 1.5 * 500)
       })
     },
     handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
+      this.itemQuery.pageNum = 1
+      this.getItemByPage()
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -352,15 +355,15 @@ export default {
     },
     sortChange(data) {
       const { prop, order } = data
-      if (prop === 'id') {
+      if (prop === 'itemID') {
         this.sortByID(order)
       }
     },
     sortByID(order) {
       if (order === 'ascending') {
-        this.listQuery.sort = '+id'
+        this.listQuery.sort = '+itemID'
       } else {
-        this.listQuery.sort = '-id'
+        this.listQuery.sort = '-itemID'
       }
       this.handleFilter()
     },

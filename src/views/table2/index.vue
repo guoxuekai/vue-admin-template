@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="itemQuery.itemName" placeholder="Name" clearable style="width: 200px;" class="filter-item" @keyup.native="handleFilter" @change="handleFilter"/>
+      <el-input v-model="itemQuery.itemName" placeholder="Name" clearable style="width: 200px;" class="filter-item" @keyup.native="handleFilter" @change="handleFilter" />
       <el-input v-model="itemQuery.itemPartNumber" placeholder="Part Number" clearable style="width: 200px;" class="filter-item" @keyup.native="handleFilter" @change="handleFilter" />
-<!--      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
+      <!--      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select>-->
       <el-select v-model="itemQuery.itemCategoryID" placeholder="Category" clearable class="filter-item" style="width: 130px" @change="handleFilter">
@@ -93,6 +93,35 @@
           <span>{{ row.itemStatus }}</span>
         </template>
       </el-table-column>
+      <el-table-column fixed="right" label="Operations" width="300">
+        <!--        <template #header>-->
+        <!--          <el-input v-model="search" size="small" placeholder="Type to search" />-->
+        <!--        </template>-->
+        <template slot-scope="{row,$index}">
+          <el-button
+            size="small"
+            type="primary"
+            @click="handleUpdate(row)"
+          >
+            Edit
+          </el-button>
+          <el-button
+            type="danger"
+            size="small"
+            @click.prevent="deleteRow(scope.$index, scope.row)"
+          >
+            Remove
+          </el-button>
+
+          <el-button
+            size="small"
+            type="success"
+          >
+            View/Hide
+          </el-button>
+
+        </template>
+      </el-table-column>
       <!--      <el-table-column label="Date" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
@@ -153,29 +182,50 @@
     <pagination v-show="total>0" :total="total" :page.sync="itemQuery.pageNum" :limit.sync="itemQuery.pageSize" @pagination="getItemByPage" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: auto; margin-left:50px;">
+        <el-form-item label="Name" prop="itemName">
+          <el-input v-model="temp.itemName" />
+        </el-form-item>
+        <el-form-item label="Part Number" prop="itemPartNumber">
+          <el-input v-model="temp.itemPartNumber" />
+        </el-form-item>
+        <el-form-item label="Stock" prop="itemStock">
+          <el-input v-model="temp.itemStock" />
+        </el-form-item>
+        <el-form-item label="Unit" prop="itemUnitID">
+          <el-input v-model="temp.itemUnitID" />
+        </el-form-item>
+        <el-form-item label="Category" prop="itemCategoryID">
+          <el-select v-model="temp.itemCategoryID" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Location" prop="itemLocationID">
+          <el-input v-model="temp.itemLocationID" />
+        </el-form-item>
+        <el-form-item label="Status"  prop="itemStatus">
+          <el-select v-model="temp.itemStatus" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item label="Date" prop="timestamp">
           <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
-        <el-form-item label="Title" prop="title">
-          <el-input v-model="temp.title" />
+
+        <el-form-item label="Img Name" prop="itemImgName">
+          <el-input v-model="temp.itemImgName" />
         </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
+
+        <el-form-item label="Img Path" prop="itemImgPath">
+          <el-input v-model="temp.itemImgPath" />
         </el-form-item>
-        <el-form-item label="Imp">
+
+        <!--        <el-form-item label="Imp">
           <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
         </el-form-item>
         <el-form-item label="Remark">
           <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -205,7 +255,7 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-import { fetchItem, fetchItemCategory, fetchItemLocation, fetchItemByPage } from '@/api/item'
+import { fetchItem, fetchItemCategory, fetchItemLocation, fetchItemByPage, createItem, updateItem } from '@/api/item'
 
 const calendarTypeOptions = [
   { key: '1', display_name: 'Harness' },
@@ -265,13 +315,17 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
+        itemName: undefined,
+        itemPartNumber: undefined,
+        itemStock: undefined,
+        itemUnitID: undefined,
+        itemCategoryID: undefined,
+        itemLocationID: undefined,
+        itemStatus: undefined,
         timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        itemImgName: undefined,
+        itemImgPath: undefined
+
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -282,8 +336,16 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        itemName: [{ required: true }],
+        itemPartNumber: [{ required: true }],
+        itemStock: [{ required: true }],
+        itemUnitID: [{ required: true }],
+        itemCategoryID: [{ required: true, message: 'type is required', trigger: 'change' }],
+        itemLocationID: [{ required: true }],
+        itemStatus: [{ required: true }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
+        itemImgName: [{ required: true }],
+        itemImgPath: [{ required: true }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false
@@ -291,7 +353,7 @@ export default {
   },
   created() {
     // this.getList()
-    //this.getItemList()
+    // this.getItemList()
     this.getItemByPage()
   },
   methods: {
@@ -390,16 +452,16 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
+          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          // this.temp.author = 'vue-element-admin'
+          createItem(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
               message: 'Created Successfully',
               type: 'success',
-              duration: 2000
+              duration: 3000
             })
           })
         }
@@ -419,7 +481,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
+          updateItem(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false

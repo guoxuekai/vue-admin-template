@@ -28,6 +28,22 @@ export function fetchItemLocation() {
   })
 }
 
+export function createItem(data) {
+  return request({
+    url: '/api/item',
+    method: 'post',
+    data
+  })
+}
+
+export function updateItem(data) {
+  return request({
+    url: '/api/item',
+    method: 'put',
+    data
+  })
+}
+
 export function getItemByPage(pageNum) {
   return request({
     url: '/api/item/findAll',

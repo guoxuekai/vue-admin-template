@@ -73,6 +73,7 @@
             disable-transitions
             effect="light"
             round
+            style="margin: auto;"
           >
             {{ row.itemCategories[0].itemCategoryName }}
           </el-tag>
@@ -88,9 +89,24 @@
         </template>-->
       </el-table-column>
       <el-table-column prop="itemLocations.0.itemLocationName" label="Location" width="100" />
-      <el-table-column prop="itemStatus" label="Status" width="80">
+      <el-table-column prop="itemStatus" label="Status" width="100">
         <template slot-scope="{row}">
-          <span>{{ row.itemStatus }}</span>
+          <span v-if="row.itemStatus">
+            <el-tag
+              :type="row.itemStatus ? 'success' : 'warning'"
+              style="border-radius: 20px;"
+            >
+              Published
+            </el-tag>
+          </span>
+          <span v-else>
+            <el-tag
+              :type="row.itemStatus ? 'success' : 'warning'"
+              style="border-radius: 20px;"
+            >
+              Draft
+            </el-tag>
+          </span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="Operations" width="300">
@@ -105,19 +121,32 @@
           >
             Edit
           </el-button>
+
+          <el-button
+            v-if="row.itemStatus"
+            style="width: 80px"
+            size="small"
+            type="warning"
+            @click="handleModifyStatus(row,true)"
+          >
+            Draft
+          </el-button>
+          <el-button
+            v-if="!row.itemStatus"
+            style="width: 80px"
+            size="small"
+            type="success"
+            @click="handleModifyStatus(row,false)"
+          >
+            Publish
+          </el-button>
+
           <el-button
             type="danger"
             size="small"
             @click.prevent="deleteRow(scope.$index, scope.row)"
           >
             Remove
-          </el-button>
-
-          <el-button
-            size="small"
-            type="success"
-          >
-            View/Hide
           </el-button>
 
         </template>
@@ -257,7 +286,7 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-import { fetchItem, fetchItemCategory, fetchItemLocation, fetchItemByPage, createItem, updateItem } from '@/api/item'
+import { fetchItem, fetchItemCategory, fetchItemLocation, fetchItemByPage, createItem, updateItem, updateItemStatus } from '@/api/item'
 
 const calendarTypeOptions = [
   { key: '1', display_name: 'Harness' },
@@ -416,11 +445,25 @@ export default {
       this.getItemByPage()
     },
     handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
+      // this.$message({
+      //   message: 'Item status have been changed' + status,
+      //   type: 'success'
+      // })
+      row.itemStatus = !status
+      console.log(row.itemID)
+      const tempData = {
+        'itemID': row.itemID,
+        'itemStatus': row.itemStatus
+      }
+      // this.temp = Object.assign({}, row)
+      updateItemStatus(tempData).then(() => {
+        this.$notify({
+          title: 'Success',
+          message: 'Update Successfully',
+          type: 'success',
+          duration: 2000
+        })
       })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data

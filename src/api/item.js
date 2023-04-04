@@ -44,6 +44,14 @@ export function updateItem(data) {
   })
 }
 
+export function updateItemStatus(data) {
+  return request({
+    url: '/api/item/updateStatus',
+    method: 'put',
+    data
+  })
+}
+
 export function getItemByPage(pageNum) {
   return request({
     url: '/api/item/findAll',

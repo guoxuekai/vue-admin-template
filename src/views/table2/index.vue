@@ -19,7 +19,7 @@
         Add
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" icon="el-icon-download" @click="handleDownload">
-        Export
+        Export to Excel
       </el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         reviewer
@@ -196,17 +196,19 @@
           <el-input v-model="temp.itemUnitID" />
         </el-form-item>
         <el-form-item label="Category" prop="itemCategoryID">
-          <el-select v-model="temp.itemCategoryID" class="filter-item" placeholder="Please select">
+          <!--          <el-select v-model="temp.itemCategoryID" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
+          </el-select>-->
+          <el-input v-model="temp.itemCategoryID" />
         </el-form-item>
         <el-form-item label="Location" prop="itemLocationID">
           <el-input v-model="temp.itemLocationID" />
         </el-form-item>
-        <el-form-item label="Status"  prop="itemStatus">
-          <el-select v-model="temp.itemStatus" class="filter-item" placeholder="Please select">
+        <el-form-item label="Status" prop="itemStatus">
+          <!--          <el-select v-model="temp.itemStatus" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-          </el-select>
+          </el-select>-->
+          <el-input v-model="temp.itemStatus" />
         </el-form-item>
         <el-form-item label="Date" prop="timestamp">
           <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
@@ -315,6 +317,7 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
+        itemID: undefined,
         itemName: undefined,
         itemPartNumber: undefined,
         itemStock: undefined,
@@ -324,7 +327,10 @@ export default {
         itemStatus: undefined,
         timestamp: new Date(),
         itemImgName: undefined,
-        itemImgPath: undefined
+        itemImgPath: undefined,
+        itemCategories: undefined,
+        itemLocations: undefined,
+        itemUnits: undefined
 
       },
       dialogFormVisible: false,
@@ -402,7 +408,7 @@ export default {
         console.log(this.list)
         setTimeout(() => {
           this.listLoading = false
-        }, 1.5 * 500)
+        }, 1 * 500)
       })
     },
     handleFilter() {
@@ -463,7 +469,7 @@ export default {
               type: 'success',
               duration: 3000
             })
-          })
+          }).then(() => this.getItemByPage())
         }
       })
     },
@@ -480,6 +486,13 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
+          delete tempData.itemCategories
+          delete tempData.itemLocations
+          delete tempData.itemUnits
+          delete tempData.timestamp
+          console.log(tempData)
+          console.log(typeof tempData)
+          console.log(typeof this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           updateItem(tempData).then(() => {
             const index = this.list.findIndex(v => v.id === this.temp.id)
@@ -491,7 +504,7 @@ export default {
               type: 'success',
               duration: 2000
             })
-          })
+          }).then(() => this.getItemByPage())
         }
       })
     },

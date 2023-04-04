@@ -455,13 +455,19 @@ export default {
         'itemID': row.itemID,
         'itemStatus': row.itemStatus
       }
+      let msg = '';
+      if (row.itemStatus) {
+        msg = 'Published';
+      } else {
+        msg = 'Draft';
+      }
       // this.temp = Object.assign({}, row)
       updateItemStatus(tempData).then(() => {
         this.$notify({
           title: 'Success',
-          message: 'Update Successfully',
+          message: 'Set Item Status as ' + msg,
           type: 'success',
-          duration: 2000
+          duration: 3000
         })
       })
     },

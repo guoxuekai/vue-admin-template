@@ -45,7 +45,7 @@
 
       <el-table-column label="Thumbnail" width="100" prop="itemID">
         <template slot-scope="{row}">
-<!--          <div style="display: flex; align-items: center">
+          <!--          <div style="display: flex; align-items: center">
             <el-image src="http://localhost:8080/static/images/5.jpg" />
             <el-image :src="`http://localhost:8080/${row.itemImgName}`" />
             <span>{{row.itemImgName}}</span>
@@ -249,13 +249,13 @@
           <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
 
-        <el-form-item label="Img Name" prop="itemImgName">
+<!--        <el-form-item label="Img Name" prop="itemImgName">
           <el-input v-model="temp.itemImgName" />
         </el-form-item>
 
         <el-form-item label="Img Path" prop="itemImgPath">
           <el-input v-model="temp.itemImgPath" />
-        </el-form-item>
+        </el-form-item>-->
 
         <el-upload
           class="avatar-uploader"
@@ -264,8 +264,9 @@
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
           :data="temp"
+          prop="itemImgName"
         >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <img v-if="temp.itemImgName" :src="`http://localhost:8080/static/images/`+temp.itemImgName" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon" />
         </el-upload>
 
@@ -397,8 +398,8 @@ export default {
         itemLocationID: [{ required: true }],
         itemStatus: [{ required: true }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        itemImgName: [{ required: true }],
-        itemImgPath: [{ required: true }],
+        /*itemImgName: [{ required: true }],
+        itemImgPath: [{ required: true }],*/
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,

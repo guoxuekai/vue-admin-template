@@ -43,10 +43,16 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Thumbnail" width="100">
-        <template #default="scope">
+      <el-table-column label="Thumbnail" width="100" prop="itemID">
+        <template slot-scope="{row}">
+<!--          <div style="display: flex; align-items: center">
+            <el-image src="http://localhost:8080/static/images/5.jpg" />
+            <el-image :src="`http://localhost:8080/${row.itemImgName}`" />
+            <span>{{row.itemImgName}}</span>
+            <span>{{ row.itemID }}</span>
+          </div>-->
           <div style="display: flex; align-items: center">
-            <el-image src="https://www.eficonnection.com/assets/ProductImages/100-00010.png" />
+            <el-image :src="`http://localhost:8080/static/images/${row.itemImgName}`" />
           </div>
         </template>
       </el-table-column>
@@ -109,7 +115,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Operations" width="300">
+      <el-table-column fixed="right" label="Operations" width="200">
         <!--        <template #header>-->
         <!--          <el-input v-model="search" size="small" placeholder="Type to search" />-->
         <!--        </template>-->
@@ -141,13 +147,13 @@
             Publish
           </el-button>
 
-          <el-button
+          <!--          <el-button
             type="danger"
             size="small"
             @click.prevent="deleteRow(scope.$index, scope.row)"
           >
-            Remove
-          </el-button>
+            Removed
+          </el-button>-->
 
         </template>
       </el-table-column>
@@ -250,6 +256,18 @@
         <el-form-item label="Img Path" prop="itemImgPath">
           <el-input v-model="temp.itemImgPath" />
         </el-form-item>
+
+        <el-upload
+          class="avatar-uploader"
+          action="http://localhost:8080/api/item/image"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          :data="temp"
+        >
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
 
         <!--        <el-form-item label="Imp">
           <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
@@ -383,7 +401,8 @@ export default {
         itemImgPath: [{ required: true }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      imageUrl: ''
     }
   },
   created() {
@@ -455,11 +474,11 @@ export default {
         'itemID': row.itemID,
         'itemStatus': row.itemStatus
       }
-      let msg = '';
+      let msg = ''
       if (row.itemStatus) {
-        msg = 'Published';
+        msg = 'Published'
       } else {
-        msg = 'Draft';
+        msg = 'Draft'
       }
       // this.temp = Object.assign({}, row)
       updateItemStatus(tempData).then(() => {
@@ -615,7 +634,50 @@ export default {
         default:
           return ''
       }
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+
+      this.$message.success(this.imageUrl)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('Image format only support JPG/PNG format!')
+      }
+      if (!isLt2M) {
+        this.$message.error('Upload image size maximum limit is 2MB!')
+      }
+      return isJPG && isLt2M
     }
   }
 }
 </script>
+
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             Total User
           </div>
-          <count-to :start-val="0" :end-val="47" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="15" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Item Category
+            Item Count
           </div>
-          <count-to :start-val="0" :end-val="4" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="endValItemCount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -35,7 +35,7 @@
           <div class="card-panel-text">
             Item Quantity
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="endValItemQuantity" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,15 +57,33 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import { fetchItemCount, fetchItemStockSum } from '@/api/item'
 
 export default {
+  data() {
+    return {
+      endValItemCount: null,
+      endValItemQuantity: null
+    }
+  },
   components: {
     CountTo
   },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
+    },
+    handleGetData() {
+      fetchItemCount().then(response => {
+        this.endValItemCount = response.data.count
+      })
+      fetchItemStockSum().then(response => {
+        this.endValItemQuantity = response.data.count
+      })
     }
+  },
+  created() {
+    this.handleGetData()
   }
 }
 </script>

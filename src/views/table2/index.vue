@@ -249,7 +249,7 @@
           <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
         </el-form-item>
 
-<!--        <el-form-item label="Img Name" prop="itemImgName">
+        <!--        <el-form-item label="Img Name" prop="itemImgName">
           <el-input v-model="temp.itemImgName" />
         </el-form-item>
 
@@ -398,8 +398,8 @@ export default {
         itemLocationID: [{ required: true }],
         itemStatus: [{ required: true }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        /*itemImgName: [{ required: true }],
-        itemImgPath: [{ required: true }],*/
+        /* itemImgName: [{ required: true }],
+        itemImgPath: [{ required: true }], */
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,

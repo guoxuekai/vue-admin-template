@@ -81,6 +81,14 @@ export function fetchItemStockSum() {
     method: 'get'
   })
 }
+
+export function fetchItemStockByCategory() {
+  return request({
+    url: '/api/item/countItemStockByCategory',
+    method: 'get'
+  })
+}
+
 /*
 export function addItem(form) {
   form.categoryId = form.categoryId[2]

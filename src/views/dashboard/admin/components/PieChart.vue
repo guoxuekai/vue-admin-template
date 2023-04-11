@@ -7,6 +7,8 @@ import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
+import { fetchItemStockByCategory } from '@/api/item'
+
 export default {
   mixins: [resize],
   props: {
@@ -25,12 +27,14 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      chartData: []
     }
   },
   mounted() {
     this.$nextTick(() => {
       this.initChart()
+      this.getCountItemStockByCategory()
     })
   },
   beforeDestroy() {
@@ -40,7 +44,25 @@ export default {
     this.chart.dispose()
     this.chart = null
   },
+  created() {
+    // this.getList()
+    // this.getItemList()
+    //this.getCountItemStockByCategory()
+  },
   methods: {
+    getCountItemStockByCategory() {
+      fetchItemStockByCategory().then(response => {
+        this.chartData = response.data.data.map(item => {
+          return {
+            name: item.name,
+            value: item.value
+          }
+        })
+        this.initChart()
+        console.log('fetchItemStockByCategory()')
+        console.log(this.chartData)
+      })
+    },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
@@ -52,22 +74,16 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: this.chartData.map((item) => item.name)
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: 'Total item stock count by category',
             type: 'pie',
             roseType: 'radius',
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.chartData,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }

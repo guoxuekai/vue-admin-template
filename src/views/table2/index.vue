@@ -87,14 +87,14 @@
         </template>-->
       </el-table-column>
       <el-table-column prop="itemLocationName" label="Location" width="100" />
-      <el-table-column prop="itemStatus" label="Status" width="100">
+      <el-table-column prop="itemStatusValue" label="Status" width="100">
         <template slot-scope="{row}">
           <span v-if="row.itemStatus">
             <el-tag
               :type="row.itemStatus ? 'success' : 'warning'"
               style="border-radius: 20px;"
             >
-              Published
+              {{ row.itemStatusValue }}
             </el-tag>
           </span>
           <span v-else>
@@ -102,7 +102,7 @@
               :type="row.itemStatus ? 'success' : 'warning'"
               style="border-radius: 20px;"
             >
-              Draft
+              {{ row.itemStatusValue }}
             </el-tag>
           </span>
         </template>
@@ -588,7 +588,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Name', 'Part Number', 'Stock', 'Unit', 'Category', 'Location', 'Status']
-        const filterVal = ['itemName', 'itemPartNumber', 'itemStock', 'itemUnitName', 'itemCategoryName', 'itemLocationName', 'itemStatus']
+        const filterVal = ['itemName', 'itemPartNumber', 'itemStock', 'itemUnitName', 'itemCategoryName', 'itemLocationName', 'itemStatusValue']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,

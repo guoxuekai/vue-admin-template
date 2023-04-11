@@ -59,29 +59,21 @@
       <el-table-column prop="itemName" label="Name" width="200" />
       <el-table-column prop="itemPartNumber" label="Part Number" />
       <el-table-column prop="itemStock" label="Stock" width="100" />
-      <el-table-column prop="itemUnits.0.itemUnitName" label="Unit" width="80" />
+      <el-table-column prop="itemUnitName" label="Unit" width="80" />
       <el-table-column
-        :filter-method="filterTag"
-        :filters="[
-          { text: 'Connector', value: 'Connector' },
-          { text: 'Harness', value: 'Harness' },
-          { text: 'Terminal', value: 'Terminal' },
-          { text: 'Seal', value: 'Seal' },
-        ]"
-        filter-placement="bottom-end"
         label="Category"
-        prop="itemCategories.0.itemCategoryName"
+        prop="itemCategorieName"
         width="120"
       >
         <template slot-scope="{row}">
           <el-tag
-            :type="tagType(row.itemCategories[0].itemCategoryName)"
+            :type="tagType(row.itemCategoryName)"
             disable-transitions
             effect="light"
             round
             style="margin: auto;"
           >
-            {{ row.itemCategories[0].itemCategoryName }}
+            {{ row.itemCategoryName }}
           </el-tag>
         </template>
         <!--    <template #default="scope">
@@ -94,7 +86,7 @@
           <el-tag>{{ scope.row.category }}</el-tag>
         </template>-->
       </el-table-column>
-      <el-table-column prop="itemLocations.0.itemLocationName" label="Location" width="100" />
+      <el-table-column prop="itemLocationName" label="Location" width="100" />
       <el-table-column prop="itemStatus" label="Status" width="100">
         <template slot-scope="{row}">
           <span v-if="row.itemStatus">
@@ -596,7 +588,7 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['Name', 'Part Number', 'Stock', 'Unit', 'Category', 'Location', 'Status']
-        const filterVal = ['itemName', 'itemPartNumber', 'itemStock', 'itemUnitID', 'itemCategoryID', 'itemLocationID', 'itemStatus']
+        const filterVal = ['itemName', 'itemPartNumber', 'itemStock', 'itemUnitName', 'itemCategoryName', 'itemLocationName', 'itemStatus']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,

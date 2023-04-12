@@ -40,6 +40,10 @@
           </el-button>
         </div>
       </el-col>
+      <el-col  :xs="24" :sm="24" :lg="16" >
+        <div class="wrapper">abcedf</div>
+
+      </el-col>
       <el-col :xs="24" :sm="24" :lg="24" />
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="wrapper">
@@ -119,15 +123,16 @@
     </el-row>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="auto" style="width: auto; margin-left:20px;">
-        <el-form-item v-if="temp.itemCategoryName" label="Name" prop="itemCategoryName">
+        <el-form-item v-if="temp.itemCategoryName || temp.itemClassify=='category'" label="Name" prop="itemCategoryName">
           <el-input v-model="temp.itemCategoryName" />
         </el-form-item>
-        <el-form-item v-if="temp.itemUnitName" label="Name" prop="itemUnitName">
+        <el-form-item v-if="temp.itemUnitName || temp.itemClassify=='unit'" label="Name" prop="itemUnitName">
           <el-input v-model="temp.itemUnitName" />
         </el-form-item>
-        <el-form-item v-if="temp.itemLocationName" label="Name" prop="itemLocationName">
+        <el-form-item v-if="temp.itemLocationName || temp.itemClassify=='location'" label="Name" prop="itemLocationName">
           <el-input v-model="temp.itemLocationName" />
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -153,7 +158,7 @@ import {
   fetchItemUnitCount,
   fetchItemLocationCount,
   updateItemCategory,
-  updateItemUnit, updateItemLocation
+  updateItemUnit, updateItemLocation, createItemCategory, createItemUnit, createItemLocation
 } from '@/api/item'
 import { data } from 'autoprefixer'
 export default {
@@ -198,12 +203,51 @@ export default {
   },
   methods: {
     handleCreate(name) {
+      console.log('handleCreate(name)')
       this.dialogTitle = this.textMap['create'][name]
       this.dialogFormVisible = true
       this.dialogStatus = 'create'
+      this.temp = {}
+      this.temp.itemClassify = name
+
       /* this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })*/
+    },
+    createData() {
+      console.log('createData()')
+      const tempData = Object.assign({}, this.temp)
+      if (this.temp.itemClassify === 'category') {
+        createItemCategory(tempData).then(() => {
+          this.dialogFormVisible = false
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      } else if (this.temp.itemClassify === 'unit') {
+        createItemUnit(tempData).then(() => {
+          this.dialogFormVisible = false
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      } else if (this.temp.itemClassify === 'location') {
+        createItemLocation(tempData).then(() => {
+          this.dialogFormVisible = false
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      }
     },
     handleUpdate(row, name) {
       this.itemClassify = name

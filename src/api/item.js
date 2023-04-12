@@ -36,6 +36,14 @@ export function updateItemCategory(data) {
   })
 }
 
+export function createItemCategory(data) {
+  return request({
+    url: '/api/item/category',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchItemUnit() {
   return request({
     url: '/api/item/unit',
@@ -51,6 +59,14 @@ export function updateItemUnit(data) {
   })
 }
 
+export function createItemUnit(data) {
+  return request({
+    url: '/api/item/unit',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchItemLocation() {
   return request({
     url: '/api/item/location',
@@ -62,6 +78,14 @@ export function updateItemLocation(data) {
   return request({
     url: '/api/item/location',
     method: 'put',
+    data
+  })
+}
+
+export function createItemLocation(data) {
+  return request({
+    url: '/api/item/location',
+    method: 'post',
     data
   })
 }

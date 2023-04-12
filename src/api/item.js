@@ -103,6 +103,26 @@ export function fetchItemStockByCategory() {
   })
 }
 
+export function fetchItemCategoryCount() {
+  return request({
+    url: '/api/item/category/count',
+    method: 'get'
+  })
+}
+
+export function fetchItemUnitCount() {
+  return request({
+    url: '/api/item/unit/count',
+    method: 'get'
+  })
+}
+
+export function fetchItemLocationCount() {
+  return request({
+    url: '/api/item/location/count',
+    method: 'get'
+  })
+}
 /*
 export function addItem(form) {
   form.categoryId = form.categoryId[2]

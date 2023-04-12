@@ -28,6 +28,14 @@ export function fetchItemCategory() {
   })
 }
 
+export function updateItemCategory(data) {
+  return request({
+    url: '/api/item/category',
+    method: 'put',
+    data
+  })
+}
+
 export function fetchItemUnit() {
   return request({
     url: '/api/item/unit',
@@ -35,10 +43,26 @@ export function fetchItemUnit() {
   })
 }
 
+export function updateItemUnit(data) {
+  return request({
+    url: '/api/item/unit',
+    method: 'put',
+    data
+  })
+}
+
 export function fetchItemLocation() {
   return request({
     url: '/api/item/location',
     method: 'get'
+  })
+}
+
+export function updateItemLocation(data) {
+  return request({
+    url: '/api/item/location',
+    method: 'put',
+    data
   })
 }
 

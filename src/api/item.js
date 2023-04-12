@@ -14,6 +14,13 @@ export function fetchItemByPage(query) {
     params: query
   })
 }
+export function fetchItemCategoryList() {
+  return request({
+    url: '/api/item/category/findAllList',
+    method: 'get'
+  })
+}
+
 export function fetchItemCategory() {
   return request({
     url: '/api/item/category',
@@ -21,9 +28,16 @@ export function fetchItemCategory() {
   })
 }
 
+export function fetchItemUnit() {
+  return request({
+    url: '/api/item/unit',
+    method: 'get'
+  })
+}
+
 export function fetchItemLocation() {
   return request({
-    url: '/api/item/location/findAll',
+    url: '/api/item/location',
     method: 'get'
   })
 }

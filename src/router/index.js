@@ -47,18 +47,19 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    meta: { title: 'Dashboard', icon: 'dashboard' },
     children: [
       {
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+        path: 'dashboard',
+        name: 'Visitor Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: 'Visitor Dashboard', icon: 'dashboard' }
       },
       {
-      path: 'admin',
-      name: 'Admin Dashboard',
-      component: () => import('@/views/dashboard/admin/index'),
-      meta: { title: 'Admin Dashboard', icon: 'dashboard' }
+        path: 'admin',
+        name: 'Admin Dashboard',
+        component: () => import('@/views/dashboard/admin/index'),
+        meta: { title: 'Admin Dashboard', icon: 'dashboard' }
       }]
   },
 
@@ -128,6 +129,19 @@ export const constantRoutes = [
         name: 'Table',
         component: () => import('@/views/table2/index'),
         meta: { title: 'Table', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/item',
+    component: Layout,
+    children: [
+      {
+        path: 'classify',
+        name: 'Classify',
+        component: () => import('@/views/itemClassify/index'),
+        meta: { title: 'Item Classify', icon: 'form' }
       }
     ]
   },

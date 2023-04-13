@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             Total User
           </div>
-          <count-to :start-val="0" :end-val="15" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="endValUserCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -58,12 +58,14 @@
 <script>
 import CountTo from 'vue-count-to'
 import { fetchItemCount, fetchItemStockSum } from '@/api/item'
+import {fetchUserCount} from "@/api/user";
 
 export default {
   data() {
     return {
       endValItemCount: null,
-      endValItemQuantity: null
+      endValItemQuantity: null,
+      endValUserCount: null
     }
   },
   components: {
@@ -79,6 +81,9 @@ export default {
       })
       fetchItemStockSum().then(response => {
         this.endValItemQuantity = response.data.count
+      })
+      fetchUserCount().then(response => {
+        this.endValUserCount = response.data.count
       })
     }
   },

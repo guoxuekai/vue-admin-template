@@ -29,3 +29,10 @@ export function fetchUser() {
     method: 'get'
   })
 }
+
+export function fetchUserCount() {
+  return request({
+    url: '/api/user/count',
+    method: 'get'
+  })
+}

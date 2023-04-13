@@ -3,87 +3,7 @@
 
     <!--    <classify-panel-group @handleSetLineChartData="handleSetLineChartData" />-->
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="wrapper">
-          <el-badge :value="categoryCount" class="item" style="width: 100%" type="warning">
-            <el-button size="small" style="width: 100%" type="info" plain>Item Category Management</el-button>
-          </el-badge>
-          <el-table
-            :data="categoryData"
-            stripe
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="itemCategoryID"
-              label="ID"
-            />
-            <el-table-column
-              prop="itemCategoryName"
-              label="Name"
-            />
-            <el-table-column
-              label="Operation"
-            >
-              <template slot-scope="{row,$index}">
-                <el-button
-                  size="small"
-                  type="primary"
-                  @click="handleUpdate(row, 'category')"
-                >
-                  Edit
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-button size="small" class="filter-item" style="margin-top: 20px; width: 100%" icon="el-icon-edit" @click="handleCreate('category')">
-            Add
-          </el-button>
-        </div>
-      </el-col>
-      <el-col  :xs="24" :sm="24" :lg="16" >
-        <div class="wrapper">abcedf</div>
-
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="24" />
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="wrapper">
-          <el-badge :value="unitCount" class="item" style="width: 100%" type="warning">
-            <el-button size="small" style="width: 100%" type="info" plain>Item Unit Management</el-button>
-          </el-badge>
-          <el-table
-            :data="unitData"
-            stripe
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="itemUnitID"
-              label="ID"
-            />
-            <el-table-column
-              prop="itemUnitName"
-              label="Name"
-            />
-            <el-table-column
-              label="Operation"
-            >
-              <template slot-scope="{row,$index}">
-                <el-button
-                  size="small"
-                  type="primary"
-                  @click="handleUpdate(row, 'unit')"
-                >
-                  Edit
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-button size="small" class="filter-item" style="margin-top: 20px; width: 100%" icon="el-icon-edit" @click="handleCreate('unit')">
-            Add
-          </el-button>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="24" />
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="wrapper">
           <el-badge :value="locationCount" class="item" style="width: 100%" type="warning">
             <el-button size="small" style="width: 100%" type="info" plain>Item Location Management</el-button>
@@ -120,6 +40,86 @@
           </el-button>
         </div>
       </el-col>
+
+      <el-col :xs="24" :sm="24" :lg="12">
+        <div class="wrapper">
+          <el-badge :value="categoryCount" class="item" style="width: 100%" type="warning">
+            <el-button size="small" style="width: 100%" type="info" plain>Item Category Management</el-button>
+          </el-badge>
+          <el-table
+            :data="categoryData"
+            stripe
+            style="width: 100%"
+          >
+            <el-table-column
+              prop="itemCategoryID"
+              label="ID"
+            />
+            <el-table-column
+              prop="itemCategoryName"
+              label="Name"
+            />
+            <el-table-column
+              label="Operation"
+            >
+              <template slot-scope="{row,$index}">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="handleUpdate(row, 'category')"
+                >
+                  Edit
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button size="small" class="filter-item" style="margin-top: 20px; width: 100%" icon="el-icon-edit" @click="handleCreate('category')">
+            Add
+          </el-button>
+        </div>
+      </el-col>
+<!--      <el-col  :xs="24" :sm="24" :lg="16" >
+        <div class="wrapper">
+          <pie-chart />
+        </div>-->
+      </el-col>
+      <el-col :xs="24" :sm="24" :lg="12">
+        <div class="wrapper">
+          <el-badge :value="unitCount" class="item" style="width: 100%" type="warning">
+            <el-button size="small" style="width: 100%" type="info" plain>Item Unit Management</el-button>
+          </el-badge>
+          <el-table
+            :data="unitData"
+            stripe
+            style="width: 100%"
+          >
+            <el-table-column
+              prop="itemUnitID"
+              label="ID"
+            />
+            <el-table-column
+              prop="itemUnitName"
+              label="Name"
+            />
+            <el-table-column
+              label="Operation"
+            >
+              <template slot-scope="{row,$index}">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="handleUpdate(row, 'unit')"
+                >
+                  Edit
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-button size="small" class="filter-item" style="margin-top: 20px; width: 100%" icon="el-icon-edit" @click="handleCreate('unit')">
+            Add
+          </el-button>
+        </div>
+      </el-col>
     </el-row>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="auto" style="width: auto; margin-left:20px;">
@@ -150,6 +150,7 @@
 
 <script>
 import ClassifyPanelGroup from '@/views/itemClassify/components/ClassifyPanelGroup'
+import PieChart from '@/views/dashboard/admin/components/PieChart'
 import {
   fetchItemCategory,
   fetchItemUnit,
@@ -163,7 +164,7 @@ import {
 import { data } from 'autoprefixer'
 export default {
   name: 'Index',
-  components: { ClassifyPanelGroup },
+  components: { ClassifyPanelGroup, PieChart },
   data() {
     return {
       categoryData: null,

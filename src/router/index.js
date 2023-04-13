@@ -174,7 +174,16 @@ export const constantRoutes = [
         name: 'RolePermission',
         component: () => import('@/views/permission/role'),
         meta: {
-          title: 'Role',
+          title: 'Role Management',
+          roles: ['admin']
+        }
+      },
+      {
+        path: '/permission/user',
+        name: 'UserPermission',
+        component: () => import('@/views/permission/user'),
+        meta: {
+          title: 'User Management',
           roles: ['admin']
         }
       }

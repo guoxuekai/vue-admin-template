@@ -3,22 +3,45 @@
     <el-button type="primary" @click="handleAddRole">New Role</el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="ID" width="150">
+      <el-table-column align="center" label="netID" width="150">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.row.netID }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Role Name" width="150">
+      <el-table-column align="center" label="First Name" width="150" prop="firstName">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.firstName }}
         </template>
       </el-table-column>
-      <el-table-column align="header-center" label="Role Description" width="600">
+      <el-table-column align="center" label="Last Name" width="150" prop="lastName">
         <template slot-scope="scope">
-          {{ scope.row.description }}
+          {{ scope.row.lastName }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Operations">
+      <el-table-column align="header-center" label="Email" width="250" >
+        <template slot-scope="scope">
+          {{ scope.row.email }}
+        </template>
+      </el-table-column>
+      <el-table-column align="header-center" label="Description">
+        <template slot-scope="scope">
+          <div v-if="scope.row.role=='admin'">
+            Super Administrator. Have access to view all pages.
+          </div>
+          <div v-else-if="scope.row.role=='editor'">
+            Normal Editor. Can see all pages except permission page.
+          </div>
+          <div v-else-if="scope.row.role=='visitor'">
+            Just a visitor. Can only see the home page and the document page.
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Role" prop="role" width="100">
+        <template slot-scope="scope">
+          {{ scope.row.role }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="Operations" width="200">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope)">Edit</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope)">Delete</el-button>
@@ -64,7 +87,7 @@
 //import { deepClone } from '@/utils'
 //import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 
-import { fetchUserRole } from "@/api/user";
+import {fetchUser} from "@/api/user";
 
 const defaultRole = {
   key: '',
@@ -97,7 +120,7 @@ export default {
     // Mock: get all routes and roles list from server
     this.getRoutes()
     this.getRoles()
-    this.getUserRoleList()
+    this.getUserList()
   },
   methods: {
     async getRoutes() {
@@ -109,10 +132,10 @@ export default {
       const res = await getRoles()
       this.rolesList = res.data
     },
-    async getUserRoleList() {
+    async getUserList() {
       try {
-        const responseUserList = await fetchUserRole()
-        this.rolesList = responseUserList.data.userRole
+        const responseUserList = await fetchUser()
+        this.rolesList = responseUserList.data.user
       } catch (error) {
         console.log(error)
       }

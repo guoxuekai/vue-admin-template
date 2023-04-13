@@ -36,3 +36,10 @@ export function fetchUserCount() {
     method: 'get'
   })
 }
+
+export function fetchUserRole() {
+  return request({
+    url: '/api/user/role',
+    method: 'get'
+  })
+}

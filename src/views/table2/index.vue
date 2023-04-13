@@ -87,14 +87,14 @@
         </template>-->
       </el-table-column>
       <el-table-column prop="itemLocationName" label="Location" width="100" />
-      <el-table-column prop="itemStatusValue" label="Status" width="100">
+      <el-table-column prop="itemStatus" label="Status" width="100">
         <template slot-scope="{row}">
           <span v-if="row.itemStatus">
             <el-tag
               :type="row.itemStatus ? 'success' : 'warning'"
               style="border-radius: 20px;"
             >
-              {{ row.itemStatusValue }}
+              Published
             </el-tag>
           </span>
           <span v-else>
@@ -102,7 +102,7 @@
               :type="row.itemStatus ? 'success' : 'warning'"
               style="border-radius: 20px;"
             >
-              {{ row.itemStatusValue }}
+              Draft
             </el-tag>
           </span>
         </template>

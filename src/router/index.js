@@ -160,7 +160,7 @@ export const constantRoutes = [
   {
     path: '/permission',
     component: Layout,
-    redirect: '/permission/page',
+    redirect: '/permission/role',
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
@@ -170,11 +170,11 @@ export const constantRoutes = [
     },
     children: [
       {
-        path: '/role',
+        path: '/permission/role',
         name: 'RolePermission',
         component: () => import('@/views/permission/role'),
         meta: {
-          title: 'Role Permission',
+          title: 'Role',
           roles: ['admin']
         }
       }

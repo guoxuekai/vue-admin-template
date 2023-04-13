@@ -63,7 +63,7 @@ export const constantRoutes = [
       }]
   },
 
-  {
+/*  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -118,7 +118,7 @@ export const constantRoutes = [
         meta: { title: 'Table', icon: 'table' }
       }
     ]
-  },
+  }, */
 
   {
     path: '/table',
@@ -127,8 +127,8 @@ export const constantRoutes = [
       {
         path: 'items',
         name: 'Table',
-        component: () => import('@/views/table2/index'),
-        meta: { title: 'Table', icon: 'table' }
+        component: () => import('@/views/table/index'),
+        meta: { title: 'Item Table', icon: 'table' }
       }
     ]
   },
@@ -145,8 +145,55 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
+    path: '/order',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'Order',
+        component: null,
+        meta: { title: 'My Order', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/permission',
+    component: Layout,
+    redirect: '/permission/page',
+    alwaysShow: true, // will always show the root menu
+    name: 'Permission',
+    meta: {
+      title: 'Permission',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: '/role',
+        name: 'RolePermission',
+        component: () => import('@/views/permission/role'),
+        meta: {
+          title: 'Role Permission',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
+  {
+    path: '/setting',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'Setting',
+        component: null,
+        meta: { title: 'Setting', icon: 'form' }
+      }
+    ]
+  },
+
+  /*{
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
@@ -214,7 +261,7 @@ export const constantRoutes = [
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
-  },
+  },*/
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

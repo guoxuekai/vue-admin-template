@@ -153,7 +153,7 @@ export const constantRoutes = [
         path: '',
         name: 'Order',
         component: null,
-        meta: { title: 'My Order', icon: 'form' }
+        meta: { title: 'My Order', icon: 'cart' }
       }
     ]
   },

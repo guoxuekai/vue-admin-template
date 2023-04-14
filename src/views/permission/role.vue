@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddRole">New Role</el-button>
 
-    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
+    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border stripe>
       <el-table-column align="center" label="ID" width="150">
         <template slot-scope="scope">
           {{ scope.row.id }}

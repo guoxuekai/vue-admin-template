@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddRole">New Role</el-button>
 
-    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
+    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border stripe>
       <el-table-column align="center" label="netID" width="150">
         <template slot-scope="scope">
           {{ scope.row.netID }}
@@ -25,20 +25,12 @@
       </el-table-column>
       <el-table-column align="header-center" label="Description">
         <template slot-scope="scope">
-          <div v-if="scope.row.role=='admin'">
-            Super Administrator. Have access to view all pages.
-          </div>
-          <div v-else-if="scope.row.role=='editor'">
-            Normal Editor. Can see all pages except permission page.
-          </div>
-          <div v-else-if="scope.row.role=='visitor'">
-            Just a visitor. Can only see the home page and the document page.
-          </div>
+          {{ scope.row.description }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="Role" prop="role" width="100">
         <template slot-scope="scope">
-          {{ scope.row.role }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="Operations" width="200">

@@ -6,7 +6,7 @@
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="wrapper">
           <el-badge :value="locationCount" class="item" style="width: 100%" type="warning">
-            <el-button size="small" style="width: 100%" type="info" plain>Item Location Management</el-button>
+            <el-button size="small" style="width: 100%" type="info">Item Location Management</el-button>
           </el-badge>
           <el-table
             :data="locationData"
@@ -44,7 +44,7 @@
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="wrapper">
           <el-badge :value="categoryCount" class="item" style="width: 100%" type="warning">
-            <el-button size="small" style="width: 100%" type="info" plain>Item Category Management</el-button>
+            <el-button size="small" style="width: 100%" type="info">Item Category Management</el-button>
           </el-badge>
           <el-table
             :data="categoryData"
@@ -86,7 +86,7 @@
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="wrapper">
           <el-badge :value="unitCount" class="item" style="width: 100%" type="warning">
-            <el-button size="small" style="width: 100%" type="info" plain>Item Unit Management</el-button>
+            <el-button size="small" style="width: 100%" type="info">Item Unit Management</el-button>
           </el-badge>
           <el-table
             :data="unitData"

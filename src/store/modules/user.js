@@ -32,8 +32,9 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
+      login({ netID: username.trim(), password: password, returnCredentials: true }).then(response => {
+        const { success, message, data } = response
+        // if (username==='admin'&&password==='admin')
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()

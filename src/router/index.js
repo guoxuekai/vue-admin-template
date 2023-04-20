@@ -157,38 +157,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/role',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
-    meta: {
-      title: 'Permission',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: '/permission/role',
-        name: 'RolePermission',
-        component: () => import('@/views/permission/role'),
-        meta: {
-          title: 'Role Management',
-          roles: ['admin']
-        }
-      },
-      {
-        path: '/permission/user',
-        name: 'UserPermission',
-        component: () => import('@/views/permission/user'),
-        meta: {
-          title: 'User Management',
-          roles: ['admin']
-        }
-      }
-    ]
-  },
+
   {
     path: '/setting',
     component: Layout,
@@ -294,9 +263,9 @@ export default router
 
 export const asyncRoutes = [
   {
-    path: '/permissionTest',
+    path: '/permission',
     component: Layout,
-    redirect: '/permissionTest/role',
+    redirect: '/permission/role',
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
@@ -306,30 +275,21 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'PagePermission',
-        meta: {
-          title: 'Page Permission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/user'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'Directive Permission'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: 'role2',
-        component: () => import('@/views/permission/role'),
+        path: '/permission/role',
         name: 'RolePermission',
+        component: () => import('@/views/permission/role'),
         meta: {
-          title: 'Role Permission',
+          title: 'Role Management',
           roles: ['admin']
+        }
+      },
+      {
+        path: '/permission/user',
+        name: 'UserPermission',
+        component: () => import('@/views/permission/user'),
+        meta: {
+          title: 'User Management',
+          roles: ['visitor']
         }
       }
     ]

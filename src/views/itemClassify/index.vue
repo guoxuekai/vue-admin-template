@@ -158,9 +158,15 @@ import {
   fetchItemCategoryCount,
   fetchItemUnitCount,
   fetchItemLocationCount,
-  updateItemCategory,
-  updateItemUnit, updateItemLocation, createItemCategory, createItemUnit, createItemLocation
+  createItemCategory, createItemUnit, createItemLocation
 } from '@/api/item'
+
+import {
+  updateItemLocation,
+  updateItemCategory,
+  updateItemUnit
+
+} from '@/api/item-classify'
 import { data } from 'autoprefixer'
 export default {
   name: 'Index',
@@ -227,7 +233,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-        })
+        }).then(() => this.getItemClassify())
       } else if (this.temp.itemClassify === 'unit') {
         createItemUnit(tempData).then(() => {
           this.dialogFormVisible = false
@@ -237,7 +243,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-        })
+        }).then(() => this.getItemClassify())
       } else if (this.temp.itemClassify === 'location') {
         createItemLocation(tempData).then(() => {
           this.dialogFormVisible = false
@@ -247,7 +253,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-        })
+        }).then(() => this.getItemClassify())
       }
     },
     handleUpdate(row, name) {
@@ -273,7 +279,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-        })
+        }).then(() => this.getItemClassify())
       } else if (this.itemClassify === 'unit') {
         updateItemUnit(tempData).then(() => {
           this.dialogFormVisible = false
@@ -283,7 +289,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-        })
+        }).then(() => this.getItemClassify())
       } else if (this.itemClassify === 'location') {
         updateItemLocation(tempData).then(() => {
           this.dialogFormVisible = false
@@ -293,7 +299,7 @@ export default {
             type: 'success',
             duration: 2000
           })
-        })
+        }).then(() => this.getItemClassify())
       }
     },
     /* getItemClassify() {

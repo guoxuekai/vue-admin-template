@@ -74,9 +74,19 @@ export function fetchItemLocation() {
   })
 }
 
-export function updateItemLocation(data) {
+/*export function updateItemLocation(data) {
   return request({
-    url: '/api/item/location',
+    url: '/api/item/location/{data.itemLocationID}',
+    method: 'put',
+    data
+  })
+}*/
+
+export function updateItemLocation(data) {
+  /*const data = { itemLocationID, itemLocationName }*/
+
+  return request({
+    url: `/api/item/location/${data.itemLocationID}`,
     method: 'put',
     data
   })

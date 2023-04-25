@@ -220,22 +220,54 @@
           <el-input v-model="temp.itemStock" />
         </el-form-item>
         <el-form-item label="Unit" prop="itemUnitID">
-          <el-input v-model="temp.itemUnitID" />
+          <el-select v-model="temp.itemUnitID" placeholder="Select Unit">
+            <el-option
+              v-for="item in unitOptions"
+              :label="item.itemUnitName"
+              :value="item.itemUnitID"
+              :key="item.itemUnitID"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="Category" prop="itemCategoryID">
           <!--          <el-select v-model="temp.itemCategoryID" class="filter-item" placeholder="Please select">
             <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>-->
-          <el-input v-model="temp.itemCategoryID" />
+          <el-select v-model="temp.itemCategoryID" placeholder="Select Category">
+            <el-option
+              v-for="item in categoryOptions"
+              :label="item.itemCategoryName"
+              :key="item.itemCategoryID"
+              :value="item.itemCategoryID"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="Location" prop="itemLocationID">
-          <el-input v-model="temp.itemLocationID" />
+          <el-select v-model="temp.itemLocationID" placeholder="Select Location">
+            <el-option
+              v-for="item in locationOptions"
+              :label="item.itemLocationName"
+              :value="item.itemLocationID"
+              :key="item.itemLocationID"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="Status" prop="itemStatus">
           <!--          <el-select v-model="temp.itemStatus" class="filter-item" placeholder="Please select">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>-->
-          <el-input v-model="temp.itemStatus" />
+          <el-select v-model="temp.itemStatus" placeholder="Select Location">
+            <el-option
+              v-for="item in statusOptions"
+              :label="item.itemStatusValue"
+              :value="item.itemStatus"
+              :key="item.itemStatusValue"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="Date" prop="timestamp">
           <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
@@ -297,7 +329,17 @@ import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
-import { fetchItem, fetchItemCategory, fetchItemLocation, fetchItemByPage, createItem, updateItem, updateItemStatus } from '@/api/item'
+import {
+  fetchItem,
+  fetchItemCategory,
+  fetchItemLocation,
+  fetchItemByPage,
+  createItem,
+  updateItem,
+  updateItemStatus,
+  fetchItemUnit,
+  fetchItemStatus
+} from '@/api/item'
 
 const calendarTypeOptions = [
   { key: '1', display_name: 'Harness' },
@@ -395,13 +437,18 @@ export default {
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
-      imageUrl: ''
+      imageUrl: '',
+      categoryOptions: undefined,
+      locationOptions: undefined,
+      unitOptions: undefined,
+      statusOptions: undefined
     }
   },
   created() {
     // this.getList()
     // this.getItemList()
     this.getItemByPage()
+    this.getClassify()
   },
   methods: {
     /*
@@ -430,14 +477,48 @@ export default {
       const abc = fetchItem().then(response => {
         this.list = response.data.items
 
-        console.log('fetchItemList()')
-        console.log(this.list)
-        console.log(this.listLoading)
-        console.log(this.list[0]['itemCategories'][0]['itemCategoryName'])
+        // console.log('fetchItemList()')
+        // console.log(this.list)
+        // console.log(this.listLoading)
+        // console.log(this.list[0]['itemCategories'][0]['itemCategoryName'])
 
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    getClassify() {
+      fetchItemCategory().then(response => {
+        this.categoryOptions = response.data.category
+        console.log(this.categoryOptions)
+        console.log(this.categoryOptions)
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1 * 500)
+      })
+      fetchItemLocation().then(response => {
+        this.locationOptions = response.data.location
+        console.log(this.locationOptions)
+        console.log(this.locationOptions)
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1 * 500)
+      })
+      fetchItemUnit().then(response => {
+        this.unitOptions = response.data.unit
+        console.log(this.unitOptions)
+        console.log(this.unitOptions)
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1 * 500)
+      })
+      fetchItemStatus().then(response => {
+        this.statusOptions = response.data.status
+        console.log(this.statusOptions)
+        console.log(this.statusOptions)
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1 * 500)
       })
     },
     getItemByPage() {
@@ -445,8 +526,8 @@ export default {
       fetchItemByPage(this.itemQuery).then(response => {
         this.list = response.data.items.records
         this.total = response.data.items.total
-        console.log('fetchItemByPage()')
-        console.log(this.list)
+        // console.log('fetchItemByPage()')
+        // console.log(this.list)
         setTimeout(() => {
           this.listLoading = false
         }, 1 * 500)
@@ -539,6 +620,8 @@ export default {
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
+      // console.log(this.temp)
+
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })

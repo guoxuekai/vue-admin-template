@@ -24,7 +24,7 @@
             <el-table-column
               label="Operation"
             >
-              <template slot-scope="{row,$index}">
+              <template slot-scope="{row}">
                 <el-button
                   size="small"
                   type="primary"
@@ -62,7 +62,7 @@
             <el-table-column
               label="Operation"
             >
-              <template slot-scope="{row,$index}">
+              <template slot-scope="{row}">
                 <el-button
                   size="small"
                   type="primary"
@@ -77,11 +77,6 @@
             Add
           </el-button>
         </div>
-      </el-col>
-<!--      <el-col  :xs="24" :sm="24" :lg="16" >
-        <div class="wrapper">
-          <pie-chart />
-        </div>-->
       </el-col>
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="wrapper">
@@ -104,7 +99,7 @@
             <el-table-column
               label="Operation"
             >
-              <template slot-scope="{row,$index}">
+              <template slot-scope="{row}">
                 <el-button
                   size="small"
                   type="primary"
@@ -123,13 +118,13 @@
     </el-row>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="auto" style="width: auto; margin-left:20px;">
-        <el-form-item v-if="temp.itemCategoryName || itemClassify=='category'" label="Name" prop="itemCategoryName">
+        <el-form-item v-if="temp.itemCategoryName || temp.itemClassify=='category'" label="Name" prop="itemCategoryName">
           <el-input v-model="temp.itemCategoryName" />
         </el-form-item>
-        <el-form-item v-if="temp.itemUnitName || itemClassify=='unit'" label="Name" prop="itemUnitName">
+        <el-form-item v-if="temp.itemUnitName || temp.itemClassify=='unit'" label="Name" prop="itemUnitName">
           <el-input v-model="temp.itemUnitName" />
         </el-form-item>
-        <el-form-item v-if="temp.itemLocationName || itemClassify=='location'" label="Name" prop="itemLocationName">
+        <el-form-item v-if="temp.itemLocationName || temp.itemClassify=='location'" label="Name" prop="itemLocationName">
           <el-input v-model="temp.itemLocationName" />
         </el-form-item>
 
@@ -149,8 +144,6 @@
 </template>
 
 <script>
-import ClassifyPanelGroup from '@/views/itemClassify/components/ClassifyPanelGroup'
-import PieChart from '@/views/dashboard/admin/components/PieChart'
 import {
   fetchItemCategory,
   fetchItemUnit,
@@ -167,10 +160,8 @@ import {
   updateItemUnit
 
 } from '@/api/item-classify'
-import { data } from 'autoprefixer'
 export default {
   name: 'Index',
-  components: { ClassifyPanelGroup, PieChart },
   data() {
     return {
       categoryData: null,
@@ -210,7 +201,7 @@ export default {
   },
   methods: {
     handleCreate(name) {
-      console.log('handleCreate(name)')
+      // console.log('handleCreate(name)')
       this.dialogTitle = this.textMap['create'][name]
       this.dialogFormVisible = true
       this.dialogStatus = 'create'
@@ -222,7 +213,7 @@ export default {
       })*/
     },
     createData() {
-      console.log('createData()')
+      // console.log('createData()')
       const tempData = Object.assign({}, this.temp)
       if (this.temp.itemClassify === 'category') {
         createItemCategory(tempData).then(() => {
@@ -259,7 +250,7 @@ export default {
     handleUpdate(row, name) {
       this.itemClassify = name
       this.temp = Object.assign({}, row) // copy obj
-      console.log(this.temp)
+      // console.log(this.temp)
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogTitle = this.textMap['update'][name]

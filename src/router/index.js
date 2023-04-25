@@ -63,7 +63,7 @@ export const constantRoutes = [
       }]
   },
 
-/*  {
+  /*  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -171,7 +171,7 @@ export const constantRoutes = [
     ]
   },
 
-  /*{
+  /* {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
